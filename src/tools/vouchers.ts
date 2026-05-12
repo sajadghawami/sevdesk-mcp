@@ -15,7 +15,7 @@ export const listVouchersSchema = {
   offset: z.number().optional().describe("Number of vouchers to skip for pagination"),
   depth: z.number().optional().describe("Depth of nested objects (0 = flat, 1 = includes related objects)"),
   status: z.string().optional().describe("Filter by voucher status (50=draft, 100=unpaid, 1000=paid)"),
-  creditDebit: z.string().optional().describe("Filter by type: 'C' for credit (income), 'D' for debit (expense)"),
+  creditDebit: z.string().optional().describe("Filter by type: 'C' for credit/expense (you bought something), 'D' for debit/revenue (you sold something)"),
   startDate: z.string().optional().describe("Filter vouchers from this date (YYYY-MM-DD)"),
   endDate: z.string().optional().describe("Filter vouchers until this date (YYYY-MM-DD)"),
   supplierId: z.string().optional().describe("Filter by supplier contact ID"),
@@ -100,7 +100,7 @@ function getStatusLabel(status: string): string {
  * Get credit/debit label
  */
 function getCreditDebitLabel(creditDebit: string): string {
-  return creditDebit === "C" ? "Credit (Income)" : "Debit (Expense)";
+  return creditDebit === "C" ? "Credit (Expense)" : "Debit (Revenue)";
 }
 
 /**
@@ -196,7 +196,7 @@ export const uploadVoucherFileSchema = {
  */
 export const createVoucherSchema = {
   voucherDate: z.string().describe("Voucher date (YYYY-MM-DD)"),
-  creditDebit: z.string().describe("Type: 'C' for credit (income), 'D' for debit (expense)"),
+  creditDebit: z.string().describe("Type: 'C' for credit/expense (you bought something), 'D' for debit/revenue (you sold something)"),
   positions: z.array(voucherPositionSchema).describe("Voucher line items"),
   supplierId: z.string().optional().describe("Supplier contact ID"),
   description: z.string().optional().describe("Voucher description"),

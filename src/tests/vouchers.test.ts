@@ -446,14 +446,14 @@ describe('voucher positions', () => {
 
 describe('formatVoucher', () => {
   it('formats voucher with supplierName', () => {
-    const v = makeVoucher({ supplierName: 'ACME GmbH', description: 'Test', payDate: '2024-01-20', paidAmount: 100, deliveryDate: '2024-01-15', creditDebit: 'D', status: '100' })
+    const v = makeVoucher({ supplierName: 'ACME GmbH', description: 'Test', payDate: '2024-01-20', paidAmount: 100, deliveryDate: '2024-01-15', creditDebit: 'C', status: '100' })
     const output = formatVoucher(v)
     expect(output).toContain('Supplier: ACME GmbH')
     expect(output).toContain('Description: Test')
     expect(output).toContain('Pay Date: 2024-01-20')
     expect(output).toContain('Paid Amount: 100')
     expect(output).toContain('Delivery Date: 2024-01-15')
-    expect(output).toContain('Debit (Expense)')
+    expect(output).toContain('Credit (Expense)')
     expect(output).toContain('Unpaid')
   })
 
@@ -478,9 +478,14 @@ describe('formatVoucher', () => {
     expect(output).toContain('Unknown (999)')
   })
 
-  it('formats creditDebit C as Credit', () => {
+  it('formats creditDebit C as expense credit', () => {
     const output = formatVoucher(makeVoucher({ creditDebit: 'C' }))
-    expect(output).toContain('Credit (Income)')
+    expect(output).toContain('Credit (Expense)')
+  })
+
+  it('formats creditDebit D as revenue debit', () => {
+    const output = formatVoucher(makeVoucher({ creditDebit: 'D' }))
+    expect(output).toContain('Debit (Revenue)')
   })
 
   it('skips optional fields when null', () => {
